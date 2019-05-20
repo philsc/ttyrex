@@ -1,0 +1,21 @@
+build --host_crosstool_top=//tools/cpp:toolchain
+build --crosstool_top //tools/cpp:toolchain
+build --spawn_strategy=linux-sandbox
+build --auto_cpu_environment_group=//tools:cpus
+build --features use_libcxx
+
+# Default to using /dev/shm for the sandbox to speed up builds.
+build --experimental_sandbox_base=/dev/shm/
+
+# Force the hostname to be 'sandbox'
+build --sandbox_fake_hostname=true
+build --sandbox_fake_username=true
+
+# Map a clean tmpfs over /tmp/ so each test gets it's own /tmp/
+build --sandbox_tmpfs_path=/tmp/
+
+# Don't allow actions to access the network unless they explicitly require it.
+build --experimental_sandbox_default_allow_network=false
+
+# Dump the output of the failing test(s) to stdout.
+test --test_output=errors

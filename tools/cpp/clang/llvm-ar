@@ -1,0 +1,3 @@
+#!/bin/bash --norc
+
+exec external/clang_8_toolchain/bin/llvm-ar "$@"
