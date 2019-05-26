@@ -1,0 +1,12 @@
+diff --git a/bazel/glog.bzl b/bazel/glog.bzl
+index 4a1bc6c..eb5216b 100644
+--- a/bazel/glog.bzl
++++ b/bazel/glog.bzl
+@@ -53,6 +53,7 @@ def glog_library(namespace='google', with_gflags=1, **kwargs):
+             '-Wno-unused-function',
+             '-Wno-unused-local-typedefs',
+             '-Wno-unused-variable',
++            '-Wno-unused-parameter',
+             "-DGLOG_BAZEL_BUILD",
+             # Inject a C++ namespace.
+             "-DGOOGLE_NAMESPACE='%s'" % namespace,

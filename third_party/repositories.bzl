@@ -1,5 +1,5 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
 
 def ttyrex_repositories():
     _maybe(
@@ -44,6 +44,26 @@ def ttyrex_repositories():
         shallow_since = "1549191278 +0100",
         remote = "https://github.com/Dav1dde/glad.git",
         build_file = "@//third_party:python_glad.BUILD",
+    )
+
+    git_repository(
+        name = "com_github_google_glog",
+        remote = "https://github.com/google/glog.git",
+        commit = "ba8a9f6952d04d1403b97df24e6836227751454e",
+        shallow_since = "1557212526 +0900",
+        patches = [
+            "@//third_party:glog.patch",
+        ],
+        patch_args = ["-p1"],
+    )
+
+    http_archive(
+        name = "com_github_gflags_gflags",
+        strip_prefix = "gflags-2.2.2",
+        urls = [
+            "https://mirror.bazel.build/github.com/gflags/gflags/archive/v2.2.2.tar.gz",
+            "https://github.com/gflags/gflags/archive/v2.2.2.tar.gz",
+        ],
     )
 
 def _maybe(repo_rule, name, **kwargs):
