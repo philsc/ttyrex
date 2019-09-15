@@ -46,6 +46,14 @@ def ttyrex_repositories():
         build_file = "@//third_party:python_glad.BUILD",
     )
 
+    new_git_repository(
+        name = "net_gtruc_glm",
+        commit = "7c07544b34c2f8655e4134239137d32aa2ccd5c8",
+        shallow_since = "1568317371 +0200",
+        remote = "https://github.com/g-truc/glm.git",
+        build_file = "@//third_party:glm.BUILD",
+    )
+
     git_repository(
         name = "com_github_google_glog",
         remote = "https://github.com/google/glog.git",
