@@ -27,3 +27,18 @@ cc_test(
         "@com_github_google_glog//:glog",
     ],
 )
+
+# Taken from https://www.freetype.org/freetype2/docs/tutorial/step1.html
+cc_test(
+    name = "freetype2_example1_test",
+    srcs = [
+        "freetype2_example1_test.c",
+    ],
+    deps = [
+        "@org_freetype_freetype2//:freetype2",
+    ],
+    args = [
+        "/usr/share/fonts/opentype/linux-libertine/LinLibertine_DR.otf",
+        "HelloWorld",
+    ],
+)
