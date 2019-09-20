@@ -42,3 +42,55 @@ cc_binary(
         "shaders/text.frag",
     ],
 )
+
+cc_library(
+    name = "process",
+    hdrs = [
+        "process.h",
+    ],
+    srcs = [
+        "process.cc",
+    ],
+    deps = [
+        "@com_github_google_glog//:glog",
+    ],
+)
+
+cc_test(
+    name = "process_test",
+    srcs = [
+        "process_test.cc",
+    ],
+    deps = [
+        ":process",
+        "@com_github_google_googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "epoll",
+    hdrs = [
+        "epoll.h",
+    ],
+    srcs = [
+        "epoll.cc",
+    ],
+    deps = [
+        "@com_github_google_glog//:glog",
+    ],
+    linkopts = [
+        "-lm",
+    ],
+)
+
+cc_test(
+    name = "epoll_test",
+    srcs = [
+        "epoll_test.cc",
+    ],
+    deps = [
+        ":epoll",
+        ":process",
+        "@com_github_google_googletest//:gtest_main",
+    ],
+)
