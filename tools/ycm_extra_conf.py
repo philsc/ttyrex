@@ -56,6 +56,16 @@ flags = [
 	'bazel-bin/../../../external/net_gtruc_glm/',
 	'-isystem',
 	'bazel-bin/../../../external/org_freetype_freetype2/include/',
+	'-isystem',
+	'bazel-genfiles/external/com_github_google_glog/src/',
+	'-isystem',
+	'bazel-genfiles/external/com_github_google_glog/glog_internal/',
+	'-isystem',
+	'bazel-bin/../../../external/com_github_google_glog/src/',
+	'-isystem',
+	'bazel-bin/../../../external/com_github_google_googletest/googletest/include/',
+	'-isystem',
+	'bazel-bin/../../../external/com_github_google_googletest/googlemock/include/',
 ]
 
 

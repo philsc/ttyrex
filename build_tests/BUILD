@@ -42,3 +42,13 @@ cc_test(
         "HelloWorld",
     ],
 )
+
+cc_test(
+    name = "googletest_test",
+    srcs = [
+        "googletest_test.cc",
+    ],
+    deps = [
+        "@com_github_google_googletest//:gtest_main",
+    ],
+)
