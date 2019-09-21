@@ -68,6 +68,33 @@ cc_test(
 )
 
 cc_library(
+    name = "pts",
+    hdrs = [
+        "pts.h",
+    ],
+    srcs = [
+        "pts.cc",
+    ],
+    deps = [
+        "@com_github_google_glog//:glog",
+    ],
+    linkopts = [
+        "-lutil",
+    ],
+)
+
+cc_binary(
+    name = "pts_test",
+    srcs = [
+        "pts_test.cc",
+    ],
+    deps = [
+        ":pts",
+        "@com_github_google_googletest//:gtest_main",
+    ],
+)
+
+cc_library(
     name = "epoll",
     hdrs = [
         "epoll.h",
