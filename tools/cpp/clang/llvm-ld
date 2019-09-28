@@ -1,3 +1,3 @@
 #!/bin/bash --norc
 
-exec external/clang_8_toolchain/bin/lld-link "$@"
+exec external/clang_toolchain/bin/lld-link "$@"

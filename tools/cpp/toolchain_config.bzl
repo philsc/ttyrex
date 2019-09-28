@@ -15,6 +15,8 @@ load("@bazel_tools//tools/cpp:cc_toolchain_config_lib.bzl",
 )
 load("@bazel_tools//tools/build_defs/cc:action_names.bzl", "ACTION_NAMES")
 
+_clang_version = "9.0"
+
 def _impl(ctx):
     if (ctx.attr.cpu == "k8" and ctx.attr.compiler == "clang"):
         toolchain_identifier = "clang8"
@@ -40,7 +42,7 @@ def _impl(ctx):
     target_cpu = "k8"
 
     if (ctx.attr.cpu == "k8" and ctx.attr.compiler == "clang"):
-        target_libc = "clang_libc++_8.0"
+        target_libc = "clang_libc++_%s" % _clang_version
     elif (ctx.attr.cpu == "k8" and ctx.attr.compiler == "gcc"):
         target_libc = "local"
     else:
@@ -54,14 +56,14 @@ def _impl(ctx):
         fail("Unreachable")
 
     if (ctx.attr.cpu == "k8" and ctx.attr.compiler == "clang"):
-        abi_version = "clang_8.0"
+        abi_version = "clang_%s" % _clang_version
     elif (ctx.attr.cpu == "k8" and ctx.attr.compiler == "gcc"):
         abi_version = "local"
     else:
         fail("Unreachable")
 
     if (ctx.attr.cpu == "k8" and ctx.attr.compiler == "clang"):
-        abi_libc_version = "clang_libc++_8.0"
+        abi_libc_version = "clang_libc++_%s" % _clang_version
     elif (ctx.attr.cpu == "k8" and ctx.attr.compiler == "gcc"):
         abi_libc_version = "local"
     else:
@@ -160,9 +162,9 @@ def _impl(ctx):
                                 "-DGLM_FORCE_CXX17",
                                 "-nostdinc",
                                 "-isystem",
-                                "external/clang_8_toolchain/include/c++/v1/",
+                                "external/clang_toolchain/include/c++/v1/",
                                 "-isystem",
-                                "external/clang_8_toolchain/lib/clang/8.0.0/include/",
+                                "external/clang_toolchain/lib/clang/%s.0/include/" % _clang_version,
                                 "-isystem",
                                 "external/glibc/usr/include/",
                                 "-isystem",
@@ -343,7 +345,7 @@ def _impl(ctx):
                     flag_groups = [
                         flag_group(
                             flags = [
-                                "-Bexternal/clang_8_toolchain/usr/bin/",
+                                "-Bexternal/clang_toolchain/usr/bin/",
                                 "-no-canonical-prefixes",
                                 "-fuse-ld=lld",
                                 "-Wl,--warn-execstack",
@@ -591,9 +593,9 @@ def _impl(ctx):
         cxx_builtin_include_directories = ["/usr/lib/gcc/", "/usr/local/include", "/usr/include"]
     elif (ctx.attr.cpu == "k8" and ctx.attr.compiler == "clang"):
         cxx_builtin_include_directories = [
-                "external/clang_8_toolchain/usr/lib/gcc/",
-                "external/clang_8_toolchain/usr/local/include",
-                "external/clang_8_toolchain/usr/include",
+                "external/clang_toolchain/usr/lib/gcc/",
+                "external/clang_toolchain/usr/local/include",
+                "external/clang_toolchain/usr/include",
             ]
     else:
         fail("Unreachable")

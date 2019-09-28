@@ -10,7 +10,7 @@ filegroup(
         "llvm-objcopy",
         "llvm-objdump",
         "llvm-strip",
-        "@clang_8_toolchain//:all",
+        "@clang_toolchain//:all",
         "@glibc//:glibc",
         "@linux-headers//:linux-headers",
     ],
