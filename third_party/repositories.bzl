@@ -86,6 +86,13 @@ def ttyrex_repositories():
         patch_args = ["-p1"],
     )
 
+    git_repository(
+        name = "com_github_ericniebler_range-v3",
+        remote = "https://github.com/ericniebler/range-v3.git",
+        commit = "67d564568359b1e09f92ee0f2a0c1f36dfd59671",
+        shallow_since = "1569527231 -0700",
+    )
+
 def _maybe(repo_rule, name, **kwargs):
     if name not in native.existing_rules():
         repo_rule(name = name, **kwargs)

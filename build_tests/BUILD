@@ -52,3 +52,13 @@ cc_test(
         "@com_github_google_googletest//:gtest_main",
     ],
 )
+
+cc_test(
+    name = "range_v3_test",
+    srcs = [
+        "range_v3_test.cc",
+    ],
+    deps = [
+        "@com_github_ericniebler_range-v3//:range-v3",
+    ],
+)
