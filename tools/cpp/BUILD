@@ -1,3 +1,17 @@
+load("//tools/cpp:toolchain_config.bzl", "cc_toolchain_config")
+
+cc_toolchain_config(
+    name = "config_clang",
+    cpu = "k8",
+    compiler = "clang",
+)
+
+cc_toolchain_config(
+    name = "config_gcc",
+    cpu = "k8",
+    compiler = "gcc",
+)
+
 filegroup(
     name = "empty",
 )
@@ -14,9 +28,9 @@ cc_toolchain_suite(
 
 cc_toolchain(
     name = "cc-compiler-k8-gcc",
+    toolchain_config = ":config_gcc",
     all_files = ":empty",
     compiler_files = ":empty",
-    cpu = "k8",
     dwp_files = ":empty",
     dynamic_runtime_lib = ":empty",
     linker_files = ":empty",
@@ -29,10 +43,10 @@ cc_toolchain(
 
 cc_toolchain(
     name = "cc-compiler-k8-clang",
+    toolchain_config = ":config_clang",
     toolchain_identifier = "clang8",
     all_files = "//tools/cpp/clang:all",
     compiler_files = "//tools/cpp/clang:all",
-    cpu = "k8",
     dwp_files = ":empty",
     dynamic_runtime_lib = ":empty",
     linker_files = "//tools/cpp/clang:all",
