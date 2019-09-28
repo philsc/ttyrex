@@ -41,7 +41,7 @@ flags = [
 	'-Werror',
 	'-Wunused-parameter',
 	'-Wstrict-prototypes',
-	'-std=c++17',
+	'-std=c++2a',
 	'-x',
 	'c++',
 	'-I',
@@ -163,4 +163,9 @@ def FlagsForFile(filename, **kwargs):
   return {
       'flags': final_flags,
       'do_cache': True
+  }
+
+def Settings(**kwargs):
+  return {
+      "flags": flags,
   }

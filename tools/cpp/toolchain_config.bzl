@@ -235,7 +235,7 @@ def _impl(ctx):
                         ACTION_NAMES.lto_backend,
                         ACTION_NAMES.clif_match,
                     ],
-                    flag_groups = [flag_group(flags = ["-std=c++17"])],
+                    flag_groups = [flag_group(flags = ["-std=c++2a"])],
                 ),
             ],
         )
@@ -328,7 +328,7 @@ def _impl(ctx):
                         ACTION_NAMES.lto_backend,
                         ACTION_NAMES.clif_match,
                     ],
-                    flag_groups = [flag_group(flags = ["-std=c++17"])],
+                    flag_groups = [flag_group(flags = ["-std=c++2a"])],
                 ),
             ],
         )
