@@ -62,3 +62,14 @@ cc_test(
         "@com_github_ericniebler_range-v3//:range-v3",
     ],
 )
+
+cc_test(
+    name = "utfcpp_test",
+    srcs = [
+        "utfcpp_test.cc",
+    ],
+    deps = [
+        "@utfcpp",
+        "@com_github_google_googletest//:gtest_main",
+    ],
+)

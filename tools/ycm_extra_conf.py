@@ -68,6 +68,8 @@ flags = [
 	'bazel-bin/../../../external/com_github_google_googletest/googlemock/include/',
 	'-isystem',
 	'bazel-bin/../../../external/com_github_ericniebler_range-v3/include/',
+	'-isystem',
+	'bazel-bin/../../../external/utfcpp/source/',
 ]
 
 

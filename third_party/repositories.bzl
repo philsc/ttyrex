@@ -93,6 +93,14 @@ def ttyrex_repositories():
         shallow_since = "1569527231 -0700",
     )
 
+    new_git_repository(
+        name = "utfcpp",
+        remote = "https://github.com/nemtrif/utfcpp.git",
+        commit = "170e2d11f516539d18bf39f552fa204dbf41d9ce",
+        shallow_since = "1563040376 -0400",
+        build_file = "@//third_party:utfcpp.BUILD",
+    )
+
 def _maybe(repo_rule, name, **kwargs):
     if name not in native.existing_rules():
         repo_rule(name = name, **kwargs)
