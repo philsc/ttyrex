@@ -41,11 +41,14 @@ cc_toolchain(
     visibility = ["//visibility:public"],
 )
 
+# TODO(phil): Seriously trim down the file lists here.
 cc_toolchain(
     name = "cc-compiler-k8-clang",
     toolchain_config = ":config_clang",
     toolchain_identifier = "clang8",
     all_files = "//tools/cpp/clang:all",
+    ar_files = "//tools/cpp/clang:all",
+    as_files = "//tools/cpp/clang:all",
     compiler_files = "//tools/cpp/clang:all",
     dwp_files = ":empty",
     dynamic_runtime_lib = ":empty",
