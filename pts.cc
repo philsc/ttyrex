@@ -71,5 +71,6 @@ void PseudoTerminal::Wait() {
   WaitForPid(master_);
   master_ = -1;
 }
+
 }  // namespace pts
 }  // namespace ttyrex

@@ -121,3 +121,17 @@ cc_test(
         "@com_github_google_googletest//:gtest_main",
     ],
 )
+
+cc_library(
+    name = "parser",
+    hdrs = [
+        "parser.h",
+    ],
+    srcs = [
+        "parser.cc",
+    ],
+    deps = [
+        ":epoll",
+        ":zero_copy",
+    ],
+)
