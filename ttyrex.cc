@@ -79,6 +79,8 @@ void RenderCharacter(Shader &shader, int character, GLfloat x, GLfloat y,
 void RenderText(Shader &shader, std::string text, GLfloat x, GLfloat y,
                 GLfloat scale, glm::vec3 color);
 
+int key_write = -1;
+
 // The MAIN function, from here we start our application and run the Game loop
 int main() {
   // Init GLFW
@@ -282,6 +284,19 @@ int main() {
       epoll.Wait(std::chrono::milliseconds(250));
     }
   });
+
+  key_write = terminal.master();
+  glfwSetKeyCallback(window, [](GLFWwindow*, int key, int, int action, int) {
+      if (action != GLFW_PRESS) {
+      return;
+      }
+      CHECK_NE(key_write, -1);
+      if (isascii(key)) {
+      char buffer = key;
+      write(key_write, &buffer, sizeof(buffer));
+      }
+      
+      });
 
   // Game loop
   while (true) {
