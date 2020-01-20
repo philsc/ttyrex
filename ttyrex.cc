@@ -1,10 +1,10 @@
+#include <atomic>
 #include <iostream>
 #include <map>
-#include <string>
-#include <vector>
 #include <mutex>
+#include <string>
 #include <thread>
-#include <atomic>
+#include <vector>
 
 // Must come first.
 #include <glad/glad.h>
@@ -75,7 +75,7 @@ const char *FT_Error_String(int err_code) {
   }
 
 void RenderCharacter(Shader &shader, int character, GLfloat x, GLfloat y,
-                GLfloat scale, glm::vec3 color);
+                     GLfloat scale, glm::vec3 color);
 void RenderText(Shader &shader, std::string text, GLfloat x, GLfloat y,
                 GLfloat scale, glm::vec3 color);
 
@@ -146,7 +146,8 @@ int main() {
   }
 
   // Set size to load glyphs as
-  if (FT_Set_Pixel_Sizes(face, face->available_sizes[0].width, face->available_sizes[0].height)) {
+  if (FT_Set_Pixel_Sizes(face, face->available_sizes[0].width,
+                         face->available_sizes[0].height)) {
     std::cout << "ERROR::FREETYPE: Failed to set pixel size" << std::endl;
     if (FT_Select_Size(face, 0)) {
       std::cout << "ERROR::FREETYPE: Failed to select size" << std::endl;
@@ -241,13 +242,15 @@ int main() {
   auto writer = raw_buffer.MakeWriter();
 
   std::mutex thread_mutex;
-  ttyrex::zero_copy::CircularBuffer<uint8_t> thread_buffer(kTerminalWidth * kTerminalHeight);
+  ttyrex::zero_copy::CircularBuffer<uint8_t> thread_buffer(kTerminalWidth *
+                                                           kTerminalHeight);
 
   ttyrex::epoll::EPoll epoll;
 
   epoll.Add(terminal.master(), EPOLLIN, [&] {
     std::span<uint8_t> buffer = writer->Get(100);
-    const ssize_t result = read(terminal.master(), buffer.data(), buffer.size());
+    const ssize_t result =
+        read(terminal.master(), buffer.data(), buffer.size());
     if (result == -1) {
       if (errno == EINTR || errno == EAGAIN) {
         writer->Rewind(buffer.size());
@@ -275,10 +278,9 @@ int main() {
 
   std::atomic_bool should_quit{false};
   std::thread poller_thread([&] {
-      while (!should_quit) {
+    while (!should_quit) {
       epoll.Wait(std::chrono::milliseconds(250));
-      LOG(INFO) << "Got a new event.";
-      }
+    }
   });
 
   // Game loop
@@ -290,44 +292,41 @@ int main() {
       break;
     }
 
-    {
-      const std::lock_guard<std::mutex> lock(thread_mutex);
-      int index = 0;
-      //if (!thread_buffer.NewDataIsAvailable()) {
-      //  continue;
-      //}
-
-    // Clear the colorbuffer
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    if (thread_buffer.NewDataIsAvailable()) {
       {
-        for (int row = 0; row < kTerminalHeight; ++row) {
-          for (int column = 0; column < kTerminalWidth; ++column) {
-            if (index >= thread_buffer.size()) {
-              row = kTerminalHeight;
-              column = kTerminalWidth;
-              break;
+        const std::lock_guard<std::mutex> lock(thread_mutex);
+        int index = 0;
+
+        // Clear the colorbuffer
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        {
+          for (int row = 0; row < kTerminalHeight; ++row) {
+            for (int column = 0; column < kTerminalWidth; ++column) {
+              if (index >= thread_buffer.size()) {
+                row = kTerminalHeight;
+                column = kTerminalWidth;
+                break;
+              }
+              RenderCharacter(shader, thread_buffer[index],
+                              column * kCharacterWidth,
+                              (kTerminalHeight - row - 1) * kCharacterHeight,
+                              1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+              ++index;
             }
-            RenderCharacter(shader, thread_buffer[index], column * kCharacterWidth, (kTerminalHeight - row - 1) * kCharacterHeight, 1.0f,
-                 glm::vec3(0.5, 0.8f, 0.2f));
-            ++index;
           }
         }
       }
-      LOG(INFO) << "Printed " << index << " characters.";
+
+      // Swap the buffers
+      glfwSwapBuffers(window);
     }
-
-    RenderText(shader, "This is sample text", 25.0f, 25.0f, 1.0f,
-               glm::vec3(0.5, 0.8f, 0.2f));
-    RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 1.0f,
-               glm::vec3(0.3, 0.7f, 0.9f));
-
-    // Swap the buffers
-    glfwSwapBuffers(window);
   }
 
   should_quit = true;
   poller_thread.join();
+
+  epoll.Delete(terminal.master());
 
   terminal.KillAndWait();
 
@@ -336,7 +335,7 @@ int main() {
 }
 
 void RenderCharacter(Shader &shader, int character, GLfloat x, GLfloat y,
-                GLfloat scale, glm::vec3 color) {
+                     GLfloat scale, glm::vec3 color) {
   // Activate corresponding render state
   shader.use();
   glUniform3f(glGetUniformLocation(shader.ID, "textColor"), color.x, color.y,

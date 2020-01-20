@@ -13,6 +13,7 @@ namespace {
 // TODO(phil): De-duplidate with what's in process.cc.
 void WaitForPid(int pid) {
   CHECK_NE(pid, -1) << ": Can't wait on a non-existent child process.";
+  LOG(INFO) << "Waiting for PID " << pid;
 
   int wstatus;
   int options = 0;
@@ -43,7 +44,7 @@ PseudoTerminal::PseudoTerminal() {
 }
 
 PseudoTerminal::~PseudoTerminal() {
-  CHECK_NE(master_, -1) << ": Must wait for child before destruction.";
+  CHECK_EQ(pid_, -1) << ": Must wait for child before destruction.";
 }
 
 void PseudoTerminal::Fork(const std::string &path,
@@ -65,19 +66,20 @@ void PseudoTerminal::Fork(const std::string &path,
   } else if (pid_ == -1) {
     PLOG(FATAL) << "Failed to open a pseudo terminal.";
   }
+  LOG(INFO) << "Created child " << path << " with PID " << pid_;
 }
 
 void PseudoTerminal::Wait() {
   CHECK_NE(pid_, -1);
-  WaitForPid(master_);
-  master_ = -1;
+  WaitForPid(pid_);
+  pid_ = -1;
 }
 
 void PseudoTerminal::KillAndWait() {
   CHECK_NE(pid_, -1);
   PCHECK(kill(pid_, SIGTERM) == 0);
-  WaitForPid(master_);
-  master_ = -1;
+  WaitForPid(pid_);
+  pid_ = -1;
 }
 
 }  // namespace pts

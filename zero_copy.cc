@@ -2,8 +2,6 @@
 
 #include <algorithm>
 
-#include <glog/logging.h>
-
 namespace ttyrex {
 namespace zero_copy {
 

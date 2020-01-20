@@ -6,6 +6,8 @@
 #include <memory>
 #include <span>
 
+#include <glog/logging.h>
+
 namespace ttyrex {
 namespace zero_copy {
 
@@ -34,6 +36,7 @@ class CircularBuffer {
       int write_head = (read_head_ + bytes_written_) % storage_.size();
       int contiguous_write_size = storage_.size() - write_head;
       const int num_bytes_to_copy = std::min<int>(contiguous_write_size, data.size());
+      CHECK_LE(num_bytes_to_copy, static_cast<int>(storage_.size()) - write_head);
       memcpy(&storage_[write_head], data.data(), num_bytes_to_copy);
       data = data.subspan(num_bytes_to_copy);
       bytes_written_ = std::min<int>(bytes_written_ + num_bytes_to_copy, storage_.size());
