@@ -68,6 +68,14 @@ void PseudoTerminal::Fork(const std::string &path,
 }
 
 void PseudoTerminal::Wait() {
+  CHECK_NE(pid_, -1);
+  WaitForPid(master_);
+  master_ = -1;
+}
+
+void PseudoTerminal::KillAndWait() {
+  CHECK_NE(pid_, -1);
+  PCHECK(kill(pid_, SIGTERM) == 0);
   WaitForPid(master_);
   master_ = -1;
 }

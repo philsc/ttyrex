@@ -17,6 +17,7 @@ class PseudoTerminal {
   void Fork(const std::string &path, const std::vector<std::string> &argv);
 
   void Wait();
+  void KillAndWait();
 
   int master() const { return master_; }
 

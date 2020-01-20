@@ -30,6 +30,9 @@ cc_binary(
         "Shader.h"
     ],
     deps = [
+        ":epoll",
+        ":pts",
+        ":zero_copy",
         "@com_github_google_glog//:glog",
         "@usr//:glfw3",
         "@python_glad//:c_glad",
