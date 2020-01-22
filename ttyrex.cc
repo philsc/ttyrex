@@ -5,6 +5,9 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <string_view>
+
+#include <utf8.h>
 
 // Must come first.
 #include <glad/glad.h>
@@ -73,6 +76,8 @@ const char *FT_Error_String(int err_code) {
       LOG(ERROR) << "Got GL error: " << err;      \
     }                                             \
   }
+
+using namespace std::literals;
 
 void RenderCharacter(Shader &shader, int character, GLfloat x, GLfloat y,
                      GLfloat scale, glm::vec3 color);
@@ -275,7 +280,6 @@ int main() {
         glfwPostEmptyEvent();
       }
     }
-    LOG(INFO) << "Read out " << result << " bytes";
   });
 
   std::atomic_bool should_quit{false};
@@ -286,17 +290,28 @@ int main() {
   });
 
   key_write = terminal.master();
-  glfwSetKeyCallback(window, [](GLFWwindow*, int key, int, int action, int) {
-      if (action != GLFW_PRESS) {
-      return;
+  glfwSetCharCallback(window, [](GLFWwindow *, unsigned int codepoint) {
+    CHECK_NE(key_write, -1);
+    uint8_t buffer[5];
+    uint8_t *end = utf8::append(codepoint, buffer);
+    write(key_write, buffer, end - buffer);
+    LOG(INFO) << "Sent code point " << codepoint;
+  });
+  glfwSetKeyCallback(window, [](GLFWwindow *, int key, int /*scancode*/,
+        int action, int mods) {
+      LOG(INFO) << "Got key " << key;
+      (void)mods;
+      (void)action;
+      std::string_view escape_sequence;
+      switch (key) {
+        case GLFW_KEY_ENTER:
+          escape_sequence = "\n"sv;
+          break;
+        default:
+          return;
       }
-      CHECK_NE(key_write, -1);
-      if (isascii(key)) {
-      char buffer = key;
-      write(key_write, &buffer, sizeof(buffer));
-      }
-      
-      });
+      write(key_write, escape_sequence.data(), escape_sequence.size());
+  });
 
   // Game loop
   while (true) {

@@ -38,6 +38,7 @@ cc_binary(
         "@python_glad//:c_glad",
         "@org_freetype_freetype2//:freetype2",
         "@net_gtruc_glm//:glm",
+        "@utfcpp",
     ],
     data = [
         "7x13.pcf",
